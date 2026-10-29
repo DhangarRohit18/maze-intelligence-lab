@@ -1,62 +1,135 @@
 # Maze Intelligence Lab
-**Interactive Maze Generation, Pathfinding, and Algorithm Performance Analysis**  
-*Course:* CS3212 – Design and Analysis of Algorithms (DAA)  
-*Institution:* Vishwakarma Institute of Technology, Pune
+> **Interactive Maze Generation, Pathfinding, and Algorithm Performance Analysis**  
+> **Course:** CS3212 – Design and Analysis of Algorithms (DAA)  
+> **Institution:** Vishwakarma Institute of Technology, Pune  
+> **Group Members:** Rohit, Aditya, Sarthak, Tushar  
+> **Live Web Application:** [https://maze-intelligence-lab.vercel.app](https://maze-intelligence-lab.vercel.app)  
+> **GitHub Repository:** [https://github.com/DhangarRohit18/maze-intelligence-lab](https://github.com/DhangarRohit18/maze-intelligence-lab)
 
 ---
 
-## 1. Overview
-Maze Intelligence Lab is an educational, scientific web application designed to evaluate, visualize, and benchmark graph search algorithms on 2D orthogonal mazes. It features an independent algorithm engine, step-by-step canvas visualization, real-time telemetry, concurrent algorithm comparison on identical mazes, statistical multi-seed benchmarking via Web Workers, DAA complexity proofs, and CSV export.
+## 1. Project Overview & Problem Statement
+
+**Maze Intelligence Lab** is an academic software project developed for **CS3212 Design and Analysis of Algorithms (DAA)**. It bridges theoretical graph analysis with interactive visual proof and empirical benchmarking.
+
+The application models orthogonal 2D discrete mazes as undirected planar graphs $G = (V, E)$, implements four pathfinding algorithms (**DFS, BFS, Dijkstra, and A***), visualizes their search wave-fronts step by step, and conducts non-blocking statistical benchmarks across multiple randomized maze seeds.
+
+In addition to the interactive React web platform, the core algorithm engine is also implemented in **modular C++ (C++17)** with dedicated standalone modules distributed across all 4 team members.
 
 ---
 
-## 2. Features Implemented
+## 2. Team Members & Work Distribution
 
-### Pathfinding Algorithms
-- **Depth-First Search (DFS):** Stack-based exploration with visited tracking, parent pointers, and path reconstruction. Explains suboptimality.
-- **Breadth-First Search (BFS):** FIFO queue-based traversal guaranteeing shortest paths on unweighted uniform-cost corridors.
-- **Dijkstra's Algorithm:** Uniform-cost search using an explicit **Binary Min-Heap Priority Queue** (no repeated array sorting).
-- **A* Search Algorithm:** Informed search evaluating $f(n) = g(n) + h(n)$ using admissible and consistent Manhattan distance heuristic $h(n) = |x_1 - x_2| + |y_1 - y_2|$.
-
-### Maze Generation
-- **Randomized Recursive Backtracking:** Stack-based depth-first spanning tree generator that guarantees a perfect maze (connected, zero topological cycles, exactly one simple path between any two passage cells).
-- Reproducible seeded pseudo-random number generator (`Mulberry32`).
-
-### Visualization & Control
-- High-performance HTML Canvas rendering with responsive scaling.
-- Step-by-step playback controls (Play, Pause, Resume, Step Forward, Reset).
-- Real-time speed adjustment slider ($2\text{ms}$ to $150\text{ms}$).
-- Overlays for Explored (Closed Set), Frontier (Open Set), and Reconstructed Shortest Path.
-- Interactive repositioning: Click to move Start ($\mathbf{S}$), Shift-click to move Goal ($\mathbf{G}$).
-
-### Telemetry & Benchmarking
-- High-resolution timing via `performance.now()` measuring pure algorithmic search isolated from DOM rendering.
-- Exact telemetry: Expanded Nodes, Discovered Nodes, Peak Frontier Size, Path Length, and algorithmic estimated memory.
-- Multithreaded Web Worker benchmark runner with statistical aggregation (Mean, Median, Spread) across multi-seed trial suites.
-- CSV dataset export for external verification.
-- Print-ready DAA academic laboratory report.
+| Member | Academic Role | Core Algorithm / Topic | Data Structures | Source Files |
+| :--- | :--- | :--- | :--- | :--- |
+| **Rohit** | Project Lead | **Informed Search ($A^*$) & Dijkstra's Algorithm** | Binary Min-Heap, Hash Map, Euclidean/Manhattan metrics | Web: [`astar.ts`](file:///c:/Users/user/OneDrive/Desktop/VIT/TY/SEM-5/DAA/CP/src/algorithms/astar.ts), [`dijkstra.ts`](file:///c:/Users/user/OneDrive/Desktop/VIT/TY/SEM-5/DAA/CP/src/algorithms/dijkstra.ts), [`priorityQueue.ts`](file:///c:/Users/user/OneDrive/Desktop/VIT/TY/SEM-5/DAA/CP/src/algorithms/priorityQueue.ts)<br>C++: [`Rohit_InformedSearch.cpp`](file:///c:/Users/user/OneDrive/Desktop/VIT/TY/SEM-5/DAA/CP/cpp/Rohit_InformedSearch.cpp) |
+| **Aditya** | Graph Engine Lead | **Graph Modeling & Recursive Backtracking Spanning Tree** | Explicit Stack, 2D Array, Mulberry32 PRNG | Web: [`recursiveBacktracking.ts`](file:///c:/Users/user/OneDrive/Desktop/VIT/TY/SEM-5/DAA/CP/src/generator/recursiveBacktracking.ts), [`MazeCanvas.tsx`](file:///c:/Users/user/OneDrive/Desktop/VIT/TY/SEM-5/DAA/CP/src/components/maze/MazeCanvas.tsx)<br>C++: [`Aditya_MazeGenerator.cpp`](file:///c:/Users/user/OneDrive/Desktop/VIT/TY/SEM-5/DAA/CP/cpp/Aditya_MazeGenerator.cpp) |
+| **Sarthak** | Traversal Lead | **Uninformed Search (BFS & DFS) & Path Reconstruction** | FIFO Queue, LIFO Stack, Predecessor Map | Web: [`bfs.ts`](file:///c:/Users/user/OneDrive/Desktop/VIT/TY/SEM-5/DAA/CP/src/algorithms/bfs.ts), [`dfs.ts`](file:///c:/Users/user/OneDrive/Desktop/VIT/TY/SEM-5/DAA/CP/src/algorithms/dfs.ts), [`pathReconstruction.ts`](file:///c:/Users/user/OneDrive/Desktop/VIT/TY/SEM-5/DAA/CP/src/algorithms/pathReconstruction.ts)<br>C++: [`Sarthak_UninformedSearch.cpp`](file:///c:/Users/user/OneDrive/Desktop/VIT/TY/SEM-5/DAA/CP/cpp/Sarthak_UninformedSearch.cpp) |
+| **Tushar** | Evaluation & QA Lead | **Empirical Benchmarking, Statistics & Report Export** | Web Workers, High-Res Timers, Recharts | Web: [`runner.ts`](file:///c:/Users/user/OneDrive/Desktop/VIT/TY/SEM-5/DAA/CP/src/benchmark/runner.ts), [`benchmark.worker.ts`](file:///c:/Users/user/OneDrive/Desktop/VIT/TY/SEM-5/DAA/CP/src/benchmark/benchmark.worker.ts), [`AcademicReport.tsx`](file:///c:/Users/user/OneDrive/Desktop/VIT/TY/SEM-5/DAA/CP/src/components/report/AcademicReport.tsx)<br>C++: [`Tushar_BenchmarkSuite.cpp`](file:///c:/Users/user/OneDrive/Desktop/VIT/TY/SEM-5/DAA/CP/cpp/Tushar_BenchmarkSuite.cpp) |
 
 ---
 
-## 3. Strict Light Theme Design
-- Main Background: `#FFFFFF`
-- Secondary Background: `#F1F5F9`
-- Primary Blue: `#2563EB`
-- Secondary Teal: `#0D9488`
-- Primary Text: `#1E293B`
-- Secondary Text: `#64748B`
-- Borders: `#D9E1EA`
-- Wall Cells: `#334155`
-- Unvisited Cells: `#FFFFFF`
-- Explored Cells: `#BFDBFE`
-- Frontier Cells: `#A5F3FC`
-- Final Path: `#FBBF24`
-- Start Node: `#16A34A`
-- Goal Node: `#DC2626`
+## 3. Directory Structure
+
+```
+c:\Users\user\OneDrive\Desktop\VIT\TY\SEM-5\DAA\CP\
+├── cpp/                                     # [C++ STANDALONE ALGORITHM ENGINE]
+│   ├── Common.hpp                           # Shared graph primitives (Point, CellType, Metrics)
+│   ├── Rohit_InformedSearch.cpp             # [Rohit] A* Search, Dijkstra & Binary Min-Heap
+│   ├── Aditya_MazeGenerator.cpp             # [Aditya] Spanning tree maze generator & Mulberry32 PRNG
+│   ├── Sarthak_UninformedSearch.cpp         # [Sarthak] BFS (Shortest Path) & DFS (Exploratory)
+│   ├── Tushar_BenchmarkSuite.cpp            # [Tushar] High-res timer harness & CSV exporter
+│   ├── main.cpp                             # Master unified CLI integrating all 4 members
+│   └── README.md                            # C++ compilation & execution instructions
+│
+├── src/                                     # [WEB APPLICATION ENGINE]
+│   ├── algorithms/                          # Core TypeScript pathfinding implementations
+│   │   ├── astar.ts                         # A* search with Manhattan heuristic
+│   │   ├── dijkstra.ts                      # Dijkstra algorithm with Min-Heap PQ
+│   │   ├── bfs.ts                           # Breadth-First Search
+│   │   ├── dfs.ts                           # Depth-First Search
+│   │   ├── priorityQueue.ts                 # Binary Min-Heap Priority Queue
+│   │   ├── pathReconstruction.ts            # Backtracking predecessor chain
+│   │   └── types.ts                         # Strict TypeScript interfaces
+│   ├── generator/                           # Seeded maze generator
+│   │   ├── recursiveBacktracking.ts         # Iterative stack spanning tree generator
+│   │   └── seededRandom.ts                  # Mulberry32 32-bit state generator
+│   ├── benchmark/                           # Web Worker multithreaded benchmarking
+│   │   ├── runner.ts                        # Metric aggregator
+│   │   └── benchmark.worker.ts              # Dedicated Web Worker
+│   ├── components/                          # Strict light-theme UI components
+│   │   ├── maze/MazeCanvas.tsx              # Native HTML5 Canvas renderer
+│   │   ├── controls/ControlPanel.tsx        # Grid, seed & animation playback controls
+│   │   ├── metrics/MetricsPanel.tsx         # Live telemetry & cost breakdown f(n) = g(n)+h(n)
+│   │   ├── comparison/ComparisonTable.tsx   # Concurrent 4-algorithm evaluator
+│   │   ├── charts/ExperimentCharts.tsx      # Recharts empirical performance graphs
+│   │   ├── benchmark/ExperimentManager.tsx  # Multi-seed batch runner
+│   │   ├── theory/TheorySection.tsx         # Complexity bounds & proofs
+│   │   └── report/AcademicReport.tsx        # Print-ready evaluation report & CSV download
+│   ├── store/mazeStore.ts                   # Zustand centralized reactive state
+│   ├── tests/algorithms.test.ts             # Vitest automated unit tests
+│   └── App.tsx                              # Main 3-column scientific dashboard
+│
+├── vercel.json                              # Production edge deployment configuration
+├── package.json                             # Dependencies & build scripts
+└── README.md                                # Master documentation
+```
 
 ---
 
-## 4. Getting Started & Commands
+## 4. Theoretical Complexity Summary (DAA Bounds)
+
+| Algorithm | Time Complexity | Space Complexity | Data Structure | Optimality Guarantee |
+| :--- | :--- | :--- | :--- | :--- |
+| **DFS** | $O(V + E) = O(V)$ | $O(V)$ auxiliary | LIFO Stack | Non-optimal; terminates on first branch found |
+| **BFS** | $O(V + E) = O(V)$ | $O(V)$ auxiliary | FIFO Queue | Guaranteed shortest path on uniform unit costs |
+| **Dijkstra** | $O((V + E) \log V)$ | $O(V + E)$ auxiliary | Binary Min-Heap | Universally optimal for non-negative weights |
+| **A\* Search** | $O(E)$ to $O(b^d)$ | $O(V)$ auxiliary | Binary Min-Heap | Guaranteed optimal under admissible Manhattan heuristic |
+| **Recursive Backtracking** | $O(R \times C)$ | $O(R \times C)$ auxiliary | Explicit LIFO Stack | Generates a perfect spanning tree (0 cycles) |
+
+*Note on Graph Bound:* In an orthogonal 4-connected maze, each vertex has maximum degree $\Delta(G) \le 4$. Therefore, $|E| \le 4|V|$, so graph search operations $O(V + E)$ simplify strictly to linear $O(V)$.
+
+---
+
+## 5. How to Run the C++ Algorithm Suite
+
+Each team member has a dedicated standalone file in the [`cpp/`](file:///c:/Users/user/OneDrive/Desktop/VIT/TY/SEM-5/DAA/CP/cpp) folder that can be compiled and run individually or through the master executable.
+
+### A. Run Individual Member Modules
+
+1. **Rohit ($A^*$ Search & Dijkstra):**
+   ```bash
+   g++ -O2 -std=c++17 -DSTANDALONE_ROHIT cpp/Rohit_InformedSearch.cpp -o cpp/test_rohit.exe
+   ./cpp/test_rohit.exe
+   ```
+
+2. **Aditya (Maze Generator & ASCII Viewer):**
+   ```bash
+   g++ -O2 -std=c++17 -DSTANDALONE_ADITYA cpp/Aditya_MazeGenerator.cpp -o cpp/test_aditya.exe
+   ./cpp/test_aditya.exe
+   ```
+
+3. **Sarthak (BFS & DFS Traversal Engine):**
+   ```bash
+   g++ -O2 -std=c++17 -DSTANDALONE_SARTHAK cpp/Sarthak_UninformedSearch.cpp -o cpp/test_sarthak.exe
+   ./cpp/test_sarthak.exe
+   ```
+
+4. **Tushar (Empirical Benchmark Suite & CSV):**
+   ```bash
+   g++ -O2 -std=c++17 -DSTANDALONE_TUSHAR cpp/Tushar_BenchmarkSuite.cpp -o cpp/test_tushar.exe
+   ./cpp/test_tushar.exe
+   ```
+
+### B. Run the Master C++ Laboratory
+```bash
+g++ -O2 -std=c++17 cpp/main.cpp -o cpp/maze_lab.exe
+./cpp/maze_lab.exe
+```
+
+---
+
+## 6. How to Run the Web Application
 
 ### Prerequisites
 - Node.js (v18+)
@@ -67,20 +140,27 @@ Maze Intelligence Lab is an educational, scientific web application designed to 
 npm install
 ```
 
-### Run Development Server
+### Start Development Server
 ```bash
 npm run dev
 ```
-Navigate to `http://localhost:3000` in your web browser.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Run Automated Correctness Unit Tests
+### Run Automated Unit Tests (Vitest)
 ```bash
 npm test
 ```
+Verifies all 6 correctness suites (reproducible seeds, wall collision prevention, start==goal edge cases, unreachable targets, BFS/Dijkstra/A* shortest path equality).
 
-### Production Build
+### Build for Production
 ```bash
 npm run build
 ```
-Build output is generated into the `dist/` directory.
 
+---
+
+## 7. Live Production Deployment
+
+- **Production URL:** [https://maze-intelligence-lab.vercel.app](https://maze-intelligence-lab.vercel.app)
+- **Deployment Platform:** Vercel Global Edge Network
+- **Repository:** [https://github.com/DhangarRohit18/maze-intelligence-lab](https://github.com/DhangarRohit18/maze-intelligence-lab)
